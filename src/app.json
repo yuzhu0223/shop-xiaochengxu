@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/logs/main"  ],
+    "pages/category/main",
+    "pages/logs/main"
+  ],
   "window": {
     "navigationBarBackgroundColor": "#ff2d4a",
     "navigationBarTitleText": "优购"
@@ -21,7 +23,7 @@
       },
       {
         "text": "分类",
-        "pagePath": "pages/logs/main",
+        "pagePath": "pages/category/main",
         "iconPath": "static/tabs/icon_category@3x.png",
         "selectedIconPath": "static/tabs/icon_category_active@3x.png"
       },
