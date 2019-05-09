@@ -30,21 +30,19 @@ export default {
 }
 </script>
 
-<style>
-.container {
+<style lang="less">
+  // 小程序是支持字体图标的
+  // 但是只支持网络路径或者base64，本地路径不支持！！！！
+
+  // mpvue 默认将字体文件转成了 base64
+  // 但是不建议使用 base64，因为小程序大小是受到限制的,一般为 2M
+
+  // 导入外部的样式
+  @import './style.css';
+
+image{
+  width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-}
-/* this rule will be remove */
-* {
-  transition: width 2s;
-  -moz-transition: width 2s;
-  -webkit-transition: width 2s;
-  -o-transition: width 2s;
+  vertical-align: middle;
 }
 </style>

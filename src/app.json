@@ -1,7 +1,12 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/logs/main"  ],
+    "pages/category/main",
+    "pages/list/main",
+    "pages/goods/main",
+    "pages/cart/main",
+    "pages/logs/main"
+  ],
   "window": {
     "navigationBarBackgroundColor": "#ff2d4a",
     "navigationBarTitleText": "优购"
@@ -21,13 +26,13 @@
       },
       {
         "text": "分类",
-        "pagePath": "pages/logs/main",
+        "pagePath": "pages/category/main",
         "iconPath": "static/tabs/icon_category@3x.png",
         "selectedIconPath": "static/tabs/icon_category_active@3x.png"
       },
       {
         "text": "购物车",
-        "pagePath": "pages/logs/main",
+        "pagePath": "pages/cart/main",
         "iconPath": "static/tabs/icon_cart@3x.png",
         "selectedIconPath": "static/tabs/icon_cart_active@3x.png"
       },
