@@ -25,66 +25,10 @@
         <!-- 其它 -->
         <div class="extra">
           订单号: GD20180511000000000178
-          <button size="mini" type="primary">支付</button>
+          <button size="mini" type="primary" @click="payment(111111)">支付</button>
         </div>
       </div>
-      <div class="item">
-        <!-- 商品图片 -->
-        <image class="pic" src="/static/uploads/goods_1.jpg"></image>
-        <!-- 商品信息 -->
-        <div class="meta">
-          <p class="name">【海外购自营】黎珐(ReFa) MTG日本 CARAT铂金微电流瘦脸瘦身提拉紧致V脸美容仪 【保税仓发货】</p>
-          <p class="price"><span>￥</span>1399<span>.00</span></p>
-          <p class="num">x1</p>
-        </div>
-        <!-- 总价 -->
-        <div class="amount">
-          共1件商品 总计: ￥4099(含运费0.00)
-        </div>
-        <!-- 其它 -->
-        <div class="extra">
-          订单号: GD20180511000000000178
-          <button size="mini" type="primary">支付</button>
-        </div>
-      </div>
-      <div class="item">
-        <!-- 商品图片 -->
-        <image class="pic" src="/static/uploads/goods_1.jpg"></image>
-        <!-- 商品信息 -->
-        <div class="meta">
-          <p class="name">【海外购自营】黎珐(ReFa) MTG日本 CARAT铂金微电流瘦脸瘦身提拉紧致V脸美容仪 【保税仓发货】</p>
-          <p class="price"><span>￥</span>1399<span>.00</span></p>
-          <p class="num">x1</p>
-        </div>
-        <!-- 总价 -->
-        <div class="amount">
-          共1件商品 总计: ￥4099(含运费0.00)
-        </div>
-        <!-- 其它 -->
-        <div class="extra">
-          订单号: GD20180511000000000178
-          <button size="mini" type="primary">支付</button>
-        </div>
-      </div>
-      <div class="item">
-        <!-- 商品图片 -->
-        <image class="pic" src="/static/uploads/goods_1.jpg"></image>
-        <!-- 商品信息 -->
-        <div class="meta">
-          <p class="name">【海外购自营】黎珐(ReFa) MTG日本 CARAT铂金微电流瘦脸瘦身提拉紧致V脸美容仪 【保税仓发货】</p>
-          <p class="price"><span>￥</span>1399<span>.00</span></p>
-          <p class="num">x1</p>
-        </div>
-        <!-- 总价 -->
-        <div class="amount">
-          共1件商品 总计: ￥4099(含运费0.00)
-        </div>
-        <!-- 其它 -->
-        <div class="extra">
-          订单号: GD20180511000000000178
-          <button size="mini" type="primary">支付</button>
-        </div>
-      </div>
+
     </scroll-view>
   </div>
 </template>
@@ -92,9 +36,9 @@
 <style scoped lang="less">
 
   .wrapper {
-    
+
   }
-  
+
   .tabs {
     display: flex;
     height: 96rpx;
@@ -114,7 +58,7 @@
     }
   }
 
-  
+
   .orders {
     width: 100%;
     background-color: #f4f4f4;
@@ -200,9 +144,57 @@
 </style>
 
 <script>
-  
+  import request from '@/utils/request'
   export default {
-    
+    data() {
+      return {
+        orderList: []
+      }
+    },
+    //页面一进来，发送请求拿订单数据
+    async onShow () {
+      const {message, meta} = await request({
+        url: '/api/public/v1/my/orders/all',
+        header: {Authorization: mpvue.getStorageSync('token')},
+        data: {
+          type: 1
+        }
+      })
+      this.orderList = message
+    },
+    methods: {
+      async payment (order_number) {
+        // 前端一般是只调起支付窗口
+        // 但是在调起窗口时需要传入的参数:由后端提供，所以应先发起请求，获得这些参数
+        // 然后再通过 wx.requestPayment() 调起支付窗口
+
+        // 1. 发请求获取参数
+        let {message} = await request({
+          url: '/api/public/v1/my/orders/req_unifiedorder',
+          method: 'post',
+          header: {
+            "Authorization": mpvue.getStorageSync('token')
+          },
+          data: {
+            order_number
+          }
+        })
+
+        // 2. 调起支付窗口
+        // mpvue.requestPayment({
+        //   timeStamp: message.pay.timeStamp,
+        //   nonceStr: message.pay.nonceStr,
+        //   package: message.pay.package,
+        //   paySign: message.pay.paySign,
+        //   signType: message.pay.signType,
+        //   success: function () {
+        //     console.log(111)
+                // 然后调用成功之后，做刷新该页面(后端改支付状态)、清空购物车(实际后端处理)等操作
+        //   }
+        // })
+
+      }
+    }
   }
 
 </script>

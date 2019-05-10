@@ -24,7 +24,7 @@
     <div class="action">
       <!-- button按钮添加open-type="contact"属性调用客服功能 -->
       <button open-type="contact">联系客服</button>
-      <span class="cart">购物车</span>
+      <span class="cart" @click="goCart">购物车</span>
       <span class="add" @click="addCart">加入购物车</span>
       <span class="buy">立即购买</span>
     </div>
@@ -177,17 +177,34 @@
         // 模拟商品信息
         let goodsObj = {
           goods_id: this.goods_id,
-          goods_num: 1
+          goods_pic: this.goodsDetailList.goods_small_logo,
+          goods_name: this.goodsDetailList.goods_name,
+          goods_price: this.goodsDetailList.goods_price,
+          goods_number: 1,
+          goods_selected: true
         }
         // 从本地存储中取出保存的添加购物信息，然后在取出的数据的基础上unshift添加进去
-        // 注意：如果相同的商品，需要遍历本地存的数据，然后判断是否有相同的 id 有则数量+1，没有就 unshift 添加商品操作
+        // 注意：对于取出的cart先判断是否为空，为空时直接unshift进去新数据，不为空则判断新数据的id是否存在，如果存在则该商品数量+1，不存在则unshift进去
         let cart = mpvue.getStorageSync('cart') || []
-        // let idObj = {}
-        // idObj = cart.forEach((item,i) => {
-        //   return idObj[i] = item.goods_id
-        // })
-        // console.log(idObj)
-        cart.unshift(goodsObj)
+
+        if (cart.length === 0) {
+          cart.unshift(goodsObj)
+        } else {
+           const isExitID = cart.every((item) => {
+            return item.goods_id === this.goods_id
+          })
+
+          if (isExitID) {
+            cart.forEach((item,i) => {
+              if (item.goods_id == goodsObj.goods_id) {
+                item.goods_number ++
+              }
+            })
+          } else {
+            cart.unshift(goodsObj)
+          }
+        }
+
         // 存储商品信息
         mpvue.setStorageSync('cart', cart)
 
@@ -199,6 +216,13 @@
         await sleep(2)
         // 消息提示之后跳转到购物车页面：所以在之前应该设置个异步执行2秒
         // 跳转到tab页，需要使用switchTab或者事件标签上开启switchTab属性
+        mpvue.switchTab({
+          url: '/pages/cart/main'
+        })
+      },
+
+      // 点击购物车跳转到购物车页面
+      goCart () {
         mpvue.switchTab({
           url: '/pages/cart/main'
         })

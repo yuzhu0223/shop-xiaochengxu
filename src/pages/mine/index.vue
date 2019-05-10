@@ -3,7 +3,10 @@
     <!-- 个人资料 -->
     <div class="profile">
       <div class="meta">
-        <img src="/static/uploads/monkey.png" class="avatar" alt="">
+        <!-- <img src="/static/uploads/monkey.png" class="avatar" alt=""> -->
+        <!-- open-data组件的type属性可以获取用户授权后的信息，包括头像userAvatarUrl -->
+        <!-- 注意：添加类名 -->
+        <open-data class="avatar" type="userAvatarUrl"></open-data>
         <span>登录/注册</span>
       </div>
     </div>
@@ -159,8 +162,37 @@
   }
 </style>
 
-<script>
+<script>sss
   export default {
-    
+    // 展示'我的'页面时，首先要检测用户的授权情况，有授权才显示本页面，未授权跳转到授权页面
+    onShow () {
+      mpvue.getSetting({
+        success: function(res) {
+          console.log(res)
+          // 判断是否授权，授权的话可以调用wx.getUserInfo接口获取用户信息
+          if (res.authSetting['scope.userInfo']) {
+            mpvue.getUserInfo(function (userInfo) {
+              // console.log(userInfo)
+            })
+          } else {
+            // 1.发请授权请求wx.authorize接口
+            // 该方法获取用户信息会报错:VM14429:1 wx.authorize({scope: "scope.userInfo"}) 不会出现授权弹窗，
+            // 请使用 <button open-type="getUserInfo />
+            // mpvue.authorize({
+            //   scope: 'scope.userInfo',
+            //   success: function (data) {
+            //     console.log(data)
+            //   }
+            // })
+
+            // 2.使用button的开放的属性，所以跳转到button按钮所在的页
+            mpvue.navigateTo({
+              url: '/pages/auth/main'
+            })
+          }
+        }
+      })
+    }
+
   }
 </script>
